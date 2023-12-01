@@ -1,24 +1,61 @@
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+@RestController
+@RequestMapping("/users")
+public class UserController {
 
-public interface UserRepository extends PagingAndSortingRepository<User, Long> {
+    @Autowired
+    private UserRepository userRepository;
 
-    // Standard CRUD methods from CrudRepository
+    @GetMapping
+    public Iterable<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 
-    // Additional methods for sorting
-    Iterable<User> findAll(Sort sort);  // Find all users and sort them
+    @GetMapping("/sorted")
+    public Iterable<User> getAllUsersSorted(@RequestParam(defaultValue = "id") String sortBy) {
+        Sort sort = Sort.by(sortBy);
+        return userRepository.findAll(sort);
+    }
 
-    // Additional methods for paging
-    Page<User> findAll(Pageable pageable);  // Find all users with pagination
+    @GetMapping("/paged")
+    public Page<User> getAllUsersPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy
+    ) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(sortBy));
+        return userRepository.findAll(pageRequest);
+    }
 
-    // Additional method for sorting and paging
-    Iterable<User> findAllById(Iterable<Long> ids, Sort sort);  // Find all users by IDs and sort them
+    @GetMapping("/sortedAndPaged")
+    public Iterable<User> getAllUsersSortedAndPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy
+    ) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(sortBy));
+        return userRepository.findAll(pageRequest).getContent();
+    }
 
-    // Additional custom query methods can be added here if needed
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    @PostMapping
+    public void saveUser(@RequestBody User user) {
+        userRepository.save(user);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userRepository.deleteById(id);
+    }
 }
 
 
