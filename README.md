@@ -1,27 +1,93 @@
-# TrasferData
-1.	CrudRepository:
-•	Basic CRUD operations: Create, Read, Update, Delete.
-•	Includes methods like findOne(), findAll(), save(), delete(), etc.
-•	It's a generic interface, allowing you to define the type of entity it manages.
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-The CrudRepository interface in Spring Data JPA provides a set of standard CRUD (Create, Read, Update, Delete) methods. Here are some of the key methods available in the CrudRepository:
+@Entity
+public class User {
 
-Save:
+    @Id
+    private Long id;
+    private String username;
+    private String email;
 
-save(S entity): Saves the given entity. It can be used for both insert and update operations.
-Retrieve:
+    // Getters and setters
 
-findById(ID id): Retrieves an entity by its id.
-findAll(): Returns all entities.
-findAllById(Iterable<ID> ids): Returns all entities identified by the given ids.
-Delete:
+    // You can generate these using your IDE or Lombok
+    public Long getId() {
+        return id;
+    }
 
-deleteById(ID id): Deletes the entity with the given id.
-delete(T entity): Deletes the given entity.
-deleteAll(): Deletes all entities.
-Existence Check:
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-existsById(ID id): Checks if an entity with the given id exists.
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+}
+-----------------------
+import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
+
+public interface UserRepository extends CrudRepository<User, Long> {
+    List<User> findByEmail(String email);
+
+    List<User> findByUsernameAndEnabled(String username, boolean enabled);
+
+    List<User> findByAgeGreaterThan(int age);
+
+    List<User> findByLastNameIgnoreCase(String lastName);
+}
+----------------------------------------------
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/users")
+public class UserController {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping
+    public List<User> getAllUsers() {
+        return (List<User>) userRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    @PostMapping
+    public void saveUser(@RequestBody User user) {
+        userRepository.save(user);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userRepository.deleteById(id);
+    }
+}
+-------------------------------------------------
+
+
+
+
 3.	PagingAndSortingRepository:
 •	Extends CrudRepository.
 •	Adds additional methods for paging and sorting data.
