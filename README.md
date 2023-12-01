@@ -112,3 +112,126 @@ public class UserController {
     }
 }
 
+________---------------------Lambok_________________________
+@Data:
+
+Generates getters, setters, toString, equals, and hashCode methods.
+java
+Copy code
+import lombok.Data;
+
+@Data
+public class MyClass {
+    private String name;
+    private int age;
+}
+@Getter / @Setter:
+
+Generates getters or setters for fields.
+java
+Copy code
+import lombok.Getter;
+import lombok.Setter;
+
+public class MyClass {
+    @Getter private String name;
+    @Setter private int age;
+}
+@NoArgsConstructor / @AllArgsConstructor / @RequiredArgsConstructor:
+
+Generates no-argument, all-argument, or required-argument constructors.
+java
+Copy code
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+public class MyClass {
+    private String name;
+    private int age;
+}
+@Builder:
+
+Generates a builder pattern for the class.
+java
+Copy code
+import lombok.Builder;
+
+@Builder
+public class MyClass {
+    private String name;
+    private int age;
+}
+@Value:
+
+Similar to @Data, but creates an immutable class.
+java
+Copy code
+import lombok.Value;
+
+@Value
+public class MyClass {
+    private final String name;
+    private final int age;
+}
+@Slf4j / @Log / @CommonsLog:
+
+Integrates with various logging frameworks (SLF4J, java.util.logging, Apache Commons Logging).
+java
+Copy code
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+public class MyClass {
+    public void myMethod() {
+        log.debug("Debug message");
+    }
+}
+@ToString:
+
+Generates a toString method for the class.
+java
+Copy code
+import lombok.ToString;
+
+@ToString
+public class MyClass {
+    private String name;
+    private int age;
+}
+@EqualsAndHashCode:
+
+Generates equals and hashCode methods based on the fields.
+java
+Copy code
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
+public class MyClass {
+    private String name;
+    private int age;
+}
+@Cleanup:
+
+Automatically closes resources (like streams) when they go out of scope.
+java
+Copy code
+import lombok.Cleanup;
+
+public class MyClass {
+    public void processFile() {
+        @Cleanup FileInputStream fis = new FileInputStream("myfile.txt");
+        // Code to read from the file
+    }
+}
+
+
+@Getter and @Setter: Generates setter and getter methods.
+@ToString: Generates toString method
+@NoArgsConstructor and @AllArgsConstructor: Generates constructors that take no argument and one argument for every field.
+@EqualsAndHashCode: Generates hashCode and equals implementations from the fields of your object.
+@RequiredArgsConstructor: Generates one argument per final / non-null field.
+@Data: A shortcut for @ToString, @EqualsAndHashCode, @Getter on all fields, and @Setter on all non-final fields and @RequiredArgsConstructor.
+
