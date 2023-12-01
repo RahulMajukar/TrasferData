@@ -84,6 +84,49 @@ public class UserController {
     }
 }
 -------------------------------------------------
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/users")
+public class UserController {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping
+    public Iterable<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @GetMapping("/paged")
+    public Page<User> getAllUsersPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy
+    ) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(sortBy));
+        return userRepository.findAll(pageRequest);
+    }
+
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    @PostMapping
+    public void saveUser(@RequestBody User user) {
+        userRepository.save(user);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userRepository.deleteById(id);
+    }
+}
 
 
 
