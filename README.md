@@ -3,12 +3,31 @@
 •	Basic CRUD operations: Create, Read, Update, Delete.
 •	Includes methods like findOne(), findAll(), save(), delete(), etc.
 •	It's a generic interface, allowing you to define the type of entity it manages.
-2.	PagingAndSortingRepository:
+
+The CrudRepository interface in Spring Data JPA provides a set of standard CRUD (Create, Read, Update, Delete) methods. Here are some of the key methods available in the CrudRepository:
+
+Save:
+
+save(S entity): Saves the given entity. It can be used for both insert and update operations.
+Retrieve:
+
+findById(ID id): Retrieves an entity by its id.
+findAll(): Returns all entities.
+findAllById(Iterable<ID> ids): Returns all entities identified by the given ids.
+Delete:
+
+deleteById(ID id): Deletes the entity with the given id.
+delete(T entity): Deletes the given entity.
+deleteAll(): Deletes all entities.
+Existence Check:
+
+existsById(ID id): Checks if an entity with the given id exists.
+3.	PagingAndSortingRepository:
 •	Extends CrudRepository.
 •	Adds additional methods for paging and sorting data.
 •	Enables sorting results by various properties.
 •	Supports paginated queries using methods like findAll(Pageable pageable).
-3.	JpaRepository:
+4.	JpaRepository:
 •	Extends both CrudRepository and PagingAndSortingRepository.
 •	Provides JPA-specific functionality on top of Crud and PagingAndSorting repositories.
 •	Includes methods like flush() to trigger a flush on the persistence context, which can be useful in certain scenarios.
