@@ -1,3 +1,29 @@
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+import java.util.List;
+
+public interface UserRepository extends PagingAndSortingRepository<User, Long> {
+
+    // Standard CRUD methods from CrudRepository
+
+    // Additional methods for sorting
+    Iterable<User> findAll(Sort sort);  // Find all users and sort them
+
+    // Additional methods for paging
+    Page<User> findAll(Pageable pageable);  // Find all users with pagination
+
+    // Additional method for sorting and paging
+    Iterable<User> findAllById(Iterable<Long> ids, Sort sort);  // Find all users by IDs and sort them
+
+    // Additional custom query methods can be added here if needed
+}
+
+
+
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
